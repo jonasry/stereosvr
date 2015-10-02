@@ -48,6 +48,9 @@ public class Barrel {
 		final int halfHeight = height / 2;
 		final double strength = Math.max(STRENGTH, 0.00001);
 		final double correctionRadius = Math.sqrt(width * width + height * height) / strength;
+
+		System.out.println("Applying Barrel Distortion Correction using correctionRadius=" + correctionRadius);
+
 		final BufferedImage output = new BufferedImage(width, height, image.getType());
 		for (int y = 0; y < width; y++) {
 			for (int x = 0; x < width; x++) {
