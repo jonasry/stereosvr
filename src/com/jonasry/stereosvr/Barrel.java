@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  */
 public class Barrel {
 	public static final boolean ENABLED = Boolean.getBoolean("corrections.barrel");
-	public static final double STRENGTH = Integer.getInteger("corrections.barrel.strength", 0) / 10;
+	public static final double STRENGTH = Integer.getInteger("corrections.barrel.strength", 0) / 10d;
 	public static final double ZOOM = Integer.getInteger("corrections.barrel.zoom", 10) / 10.0d;
 
 	public static BufferedImage applyCorrection(BufferedImage image) {
