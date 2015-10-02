@@ -3,7 +3,7 @@ package com.jonasry.stereosvr;
 import java.awt.image.BufferedImage;
 
 /**
- * Implementation of with some modifications:
+ * Implementation of (with some modifications):
  *   http://www.tannerhelland.com/4743/simple-algorithm-correcting-lens-distortion
  */
 public class Barrel {
