@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -58,7 +59,14 @@ public class Main {
         server.join();
     }
 
-    private static Future<BufferedImage> capture(final String description, final String path, final int verticalCorrection) throws Exception {
+    private static void captureAndSaveImage() throws InterruptedException, ExecutionException, IOException {
+		final Future<BufferedImage> leftFuture = capture("left", DEVICE_PATH + LEFT, 0);
+		final Future<BufferedImage> rightFuture = capture("right", DEVICE_PATH + RIGHT, VERTICAL_OFFSET);
+		final BufferedImage stereoImage = getStereoImage(leftFuture.get(), rightFuture.get());
+		saveImage(stereoImage, "out.png", "png");
+	}
+
+    private static Future<BufferedImage> capture(final String description, final String path, final int verticalCorrection) {
         final String device = String.format("%s:%s", DEVICE_PREFIX, path);
 
         final Callable<BufferedImage> cmd = new Callable<BufferedImage>() {
@@ -87,7 +95,7 @@ public class Main {
         return service.submit(cmd);
     }
 
-    private static BufferedImage getStereoImage(final BufferedImage left, final BufferedImage right) throws Exception {
+    private static BufferedImage getStereoImage(final BufferedImage left, final BufferedImage right) {
         final BufferedImage imageOutput = new BufferedImage(left.getWidth() * 2, left.getHeight(), BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g = imageOutput.createGraphics();
         g.drawImage(left, 0, 0, null);
@@ -116,7 +124,7 @@ public class Main {
         return sb.toString();
     }
 
-    @SuppressWarnings("serial")
+	@SuppressWarnings("serial")
 	public static class InternalServer extends HttpServlet {
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             final String path = req.getPathInfo();
@@ -127,10 +135,7 @@ public class Main {
                 final long start = System.nanoTime();
                 try {
                     if (path.endsWith("stereo")) {
-                        final Future<BufferedImage> leftFuture = Main.capture("left", DEVICE_PATH + LEFT, 0);
-                        final Future<BufferedImage> rightFuture = Main.capture("right", DEVICE_PATH + RIGHT, VERTICAL_OFFSET);
-                        final BufferedImage stereoImage = getStereoImage(leftFuture.get(), rightFuture.get());
-                        saveImage(stereoImage, "out.png", "png");
+                        captureAndSaveImage();
                         resp.sendRedirect("/out.png");
 
                     } else {
