@@ -36,10 +36,14 @@ public class Barrel {
 				if (r != 0) {
 					theta = Math.atan(r) / r;
 				}
-				final int sx = (int) (halfWidth + dx / theta / zoom);
-				final int sy = (int) (halfHeight + dy / theta / zoom);
+				final double tx = dx / theta / zoom;
+				final double ty = dy / theta / zoom;
+				final int sx = (int) (halfWidth + tx);
+				final int sy = (int) (halfHeight + ty);
 				if (sx < width && sx >= 0 && sy < height && sy >= 0) {
 					output.setRGB(x, y, image.getRGB(sx, sy));
+				} else {
+					System.out.println("no");
 				}
 			}
 		}
