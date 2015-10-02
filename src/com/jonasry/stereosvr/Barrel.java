@@ -26,7 +26,7 @@ public class Barrel {
 
 		System.out.println("Applying Barrel Distortion Correction");
 		System.out.println("   Using correctionRadius=" + correctionRadius);
-		System.out.println(   "Using z=" + z);
+		System.out.println("   Using z=" + z);
 
 		final BufferedImage output = new BufferedImage(width, height, image.getType());
 		for (int y = 0; y < width; y++) {
