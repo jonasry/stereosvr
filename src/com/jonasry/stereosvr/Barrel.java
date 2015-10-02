@@ -24,7 +24,9 @@ public class Barrel {
 		final double n = ZOOM;
 		final double z = n * n * halfHeight / correctionRadius / Math.atan(n * halfHeight / correctionRadius);
 
-		System.out.println("Applying Barrel Distortion Correction using correctionRadius=" + correctionRadius);
+		System.out.println("Applying Barrel Distortion Correction");
+		System.out.println("   Using correctionRadius=" + correctionRadius);
+		System.out.println(   "Using z=" + z);
 
 		final BufferedImage output = new BufferedImage(width, height, image.getType());
 		for (int y = 0; y < width; y++) {
