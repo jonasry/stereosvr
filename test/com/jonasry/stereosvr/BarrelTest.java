@@ -1,7 +1,5 @@
 package com.jonasry.stereosvr;
 
-import static org.junit.Assert.*;
-
 import java.awt.image.BufferedImage;
 
 import org.junit.Test;
@@ -16,5 +14,4 @@ public class BarrelTest {
 		BufferedImage image = new BufferedImage(960, 1080, BufferedImage.TYPE_INT_RGB);
 		Barrel.applyCorrection(image);
 	}
-
 }

@@ -20,8 +20,9 @@ public class Barrel {
 		final int halfWidth = width / 2;
 		final int halfHeight = height / 2;
 		final double strength = Math.max(STRENGTH, 0.00001);
-		final double zoom = Math.max(ZOOM, 0.00001);
 		final double correctionRadius = Math.sqrt(width * width + height * height) / strength;
+		final double n = ZOOM;
+		final double z = n * n * halfHeight / correctionRadius / Math.atan(n * halfHeight / correctionRadius);
 
 		System.out.println("Applying Barrel Distortion Correction using correctionRadius=" + correctionRadius);
 
@@ -36,14 +37,12 @@ public class Barrel {
 				if (r != 0) {
 					theta = Math.atan(r) / r;
 				}
-				final double tx = dx / theta / zoom;
-				final double ty = dy / theta / zoom;
+				final double tx = dx / theta / z;
+				final double ty = dy / theta / z;
 				final int sx = (int) (halfWidth + tx);
 				final int sy = (int) (halfHeight + ty);
 				if (sx < width && sx >= 0 && sy < height && sy >= 0) {
 					output.setRGB(x, y, image.getRGB(sx, sy));
-				} else {
-					System.out.println("no");
 				}
 			}
 		}
