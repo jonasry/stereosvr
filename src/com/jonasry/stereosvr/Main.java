@@ -96,10 +96,12 @@ public class Main {
     }
 
     private static BufferedImage getStereoImage(final BufferedImage left, final BufferedImage right) {
-        final BufferedImage imageOutput = new BufferedImage(left.getWidth() * 2, left.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    	final BufferedImage correctedLeft = Barrel.applyCorrection(left);
+    	final BufferedImage correctedRight = Barrel.applyCorrection(right);
+        final BufferedImage imageOutput = new BufferedImage(correctedLeft.getWidth() * 2, correctedLeft.getHeight(), BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g = imageOutput.createGraphics();
-        g.drawImage(left, 0, 0, null);
-        g.drawImage(right, left.getWidth(), 0, null);
+        g.drawImage(correctedLeft, 0, 0, null);
+        g.drawImage(correctedRight, correctedLeft.getWidth(), 0, null);
         g.dispose();
         return imageOutput;
     }
