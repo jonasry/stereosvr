@@ -1,4 +1,4 @@
-package com.jonasry;
+package com.jonasry.stereosvr;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
