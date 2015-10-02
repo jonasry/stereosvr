@@ -40,6 +40,8 @@ public class Barrel {
 
 	public static BufferedImage applyCorrection(BufferedImage image) {
 		if (!ENABLED) {
+			System.out.println(System.getProperty("corrections.barrel"));
+			System.out.println(System.getProperty("corrections.barrel.strength"));
 			return image;
 		}
 		final int width = image.getWidth();
