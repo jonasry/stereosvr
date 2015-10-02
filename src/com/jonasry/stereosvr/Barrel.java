@@ -9,12 +9,10 @@ import java.awt.image.BufferedImage;
 public class Barrel {
 	public static final boolean ENABLED = Boolean.getBoolean("corrections.barrel");
 	public static final double STRENGTH = Integer.getInteger("corrections.barrel.strength", 0) / 10;
-	public static final double ZOOM = Integer.getInteger("corrections.barrel.zoom", 10) / 10;
+	public static final double ZOOM = Integer.getInteger("corrections.barrel.zoom", 10) / 10.0d;
 
 	public static BufferedImage applyCorrection(BufferedImage image) {
 		if (!ENABLED) {
-			System.out.println(System.getProperty("corrections.barrel"));
-			System.out.println(System.getProperty("corrections.barrel.strength"));
 			return image;
 		}
 		final int width = image.getWidth();
@@ -22,6 +20,7 @@ public class Barrel {
 		final int halfWidth = width / 2;
 		final int halfHeight = height / 2;
 		final double strength = Math.max(STRENGTH, 0.00001);
+		final double zoom = Math.max(ZOOM, 0.00001);
 		final double correctionRadius = Math.sqrt(width * width + height * height) / strength;
 
 		System.out.println("Applying Barrel Distortion Correction using correctionRadius=" + correctionRadius);
@@ -37,8 +36,8 @@ public class Barrel {
 				if (r != 0) {
 					theta = Math.atan(r) / r;
 				}
-				final int sx = (int) Math.round(halfWidth + dx / theta / ZOOM);
-				final int sy = (int) Math.round(halfHeight + dy / theta / ZOOM);
+				final int sx = (int) (halfWidth + dx / theta / zoom);
+				final int sy = (int) (halfHeight + dy / theta / zoom);
 				if (sx < width && sx >= 0 && sy < height && sy >= 0) {
 					output.setRGB(x, y, image.getRGB(sx, sy));
 				}
