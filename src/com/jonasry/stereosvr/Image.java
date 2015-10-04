@@ -24,11 +24,11 @@ public class Image {
 	}
 
 	public static void write(BufferedImage image, String name) throws IOException {
-        System.out.println("Writing " + name + ". W:" + image.getWidth() + " H:" + image.getHeight());
-        final long start = System.nanoTime();
+		System.out.println("Writing " + name + ". W:" + image.getWidth() + " H:" + image.getHeight());
+		final long start = System.nanoTime();
 		ImageIO.write(image, getType(name), new File(name));
-        final long duration = System.nanoTime() - start;
-        System.out.println("Saved " + name + " in " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
+		final long duration = System.nanoTime() - start;
+		System.out.println("Saved " + name + " in " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
 	}
 
 	public static BufferedImage read(String name) throws IOException {
@@ -40,11 +40,11 @@ public class Image {
 	}
 
 	public static BufferedImage createStereoImage(BufferedImage left, BufferedImage right) {
-        final BufferedImage imageOutput = new BufferedImage(left.getWidth() * 2, left.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        final Graphics2D g = imageOutput.createGraphics();
-        g.drawImage(left, 0, 0, null);
-        g.drawImage(right, left.getWidth(), 0, null);
-        g.dispose();
-        return imageOutput;
-    }
+		final BufferedImage imageOutput = new BufferedImage(left.getWidth() * 2, left.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D g = imageOutput.createGraphics();
+		g.drawImage(left, 0, 0, null);
+		g.drawImage(right, left.getWidth(), 0, null);
+		g.dispose();
+		return imageOutput;
+	}
 }
