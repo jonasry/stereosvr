@@ -19,16 +19,18 @@ public class Image {
 		}
 	}
 
-	public static void writeStereoImage(final BufferedImage left, final BufferedImage right) throws IOException {
-		write(createStereoImage(left, right), "out.png");
+	public static File writeStereoImage(final BufferedImage left, final BufferedImage right, String fileName) throws IOException {
+		return write(createStereoImage(left, right), fileName);
 	}
 
-	public static void write(BufferedImage image, String name) throws IOException {
+	public static File write(BufferedImage image, String name) throws IOException {
 		System.out.println("Writing " + name + ". W:" + image.getWidth() + " H:" + image.getHeight());
+		final File file = new File(name);
 		final long start = System.nanoTime();
-		ImageIO.write(image, getType(name), new File(name));
+		ImageIO.write(image, getType(name), file);
 		final long duration = System.nanoTime() - start;
 		System.out.println("Saved " + name + " in " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
+		return file;
 	}
 
 	public static BufferedImage read(String name) throws IOException {
