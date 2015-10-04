@@ -20,34 +20,43 @@ public class Barrel {
 		final int height = image.getHeight();
 		final int halfWidth = width / 2;
 		final int halfHeight = height / 2;
-		final double correctionRadius = Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight) / strength;
-		final double rz = zoom * halfHeight / correctionRadius;
-		final double z = zoom * rz / Math.atan(rz);
+		final double rc = Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight) / strength;
+		final double rz = zoom * halfHeight / rc;
+		final double z = Math.atan(rz) / rz / zoom;
 
 		System.out.println("Applying Barrel Distortion Correction");
-		System.out.println("   Using correctionRadius=" + correctionRadius);
-		System.out.println("   Using z=" + z);
+		System.out.println("   Using rc = " + String.format("%8.4f", rc));
+		System.out.println("   Using  z = " + String.format("%8.4f", z));
 
 		final BufferedImage output = new BufferedImage(width, height, image.getType());
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				final int dx = x - halfWidth;
-				final int dy = y - halfHeight;
-				final double distance = Math.sqrt(dx * dx + dy * dy);
-				final double r = distance / correctionRadius;
-				final double theta = r == 0 ? 1 : Math.atan(r) / r;
-				final double tx = dx / theta / z;
-				final double ty = dy / theta / z;
-				final int sx = (int) (halfWidth + tx);
-				final int sy = (int) (halfHeight + ty);
-				if (sx < width && sx >= 0 && sy < height && sy >= 0) {
-					output.setRGB(x, y, image.getRGB(sx, sy));
+				final Point s = Point
+						.from(x, y)
+						.translate(-halfWidth, -halfHeight)
+						.applyTheta(rc, z)
+						.translate(halfWidth, halfHeight);
+
+				if (s.x < width && s.x >= 0 && s.y < height && s.y >= 0) {
+					output.setRGB(x, y, image.getRGB((int) s.x, (int) s.y));
 				}
 			}
 		}
 		return output;
 	}
-	
+
+	public static final class Point {
+		public final double x;
+		public final double y;
+		public Point(double x, double y) { this.x = x; this.y = y; }
+		public static Point from(double x, double y) { return new Point(x, y); }
+		public Point translate(double dX, double dY) { return new Point(x + dX, y + dY); }
+		public Point multiply(double theta) { return new Point(x * theta, y * theta); }
+		public Point applyTheta(double rc, double z) { return multiply(theta(rc, z)); }
+		public double length() { return Math.sqrt(x * x + y * y); }
+		public double theta(double rc, double z) { double r = length() / rc; return r == 0 ? 1 : z * r / Math.atan(r); }
+	}
+
 	public static void main(String[] args) throws Exception {
 		final BufferedImage image = Image.read(args[0]);
 		final BufferedImage result = applyCorrection(image);

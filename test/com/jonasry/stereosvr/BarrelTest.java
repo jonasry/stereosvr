@@ -8,13 +8,13 @@ import java.awt.image.BufferedImage;
 import org.junit.Test;
 
 public class BarrelTest {
-	private static final int N = 48;
-	private static final int SZ = 10;
+	private static final int N = 24;
+	private static final int SZ = 20;
 	private static final int SIZE = SZ * N * 2;
 
 	@Test
 	public void test() throws Exception {
-		final BufferedImage image = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
+		final BufferedImage image = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_BYTE_BINARY);
 		final Graphics2D graphics = image.createGraphics();
 
 		graphics.setColor(Color.WHITE);
@@ -31,7 +31,7 @@ public class BarrelTest {
 			}
 		}
 
-		final BufferedImage corr = Barrel.applyCorrection(image, Barrel.STRENGTH * 1.71, 0.95);
+		final BufferedImage corr = Barrel.applyCorrection(image, Barrel.STRENGTH, 0.85);
 		Image.write(Image.createStereoImage(corr, corr), "test.png");
 
 		graphics.dispose();
