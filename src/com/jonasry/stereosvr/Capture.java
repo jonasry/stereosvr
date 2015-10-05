@@ -53,12 +53,10 @@ public class Capture {
 				final BufferedImage imageIn = Image.read(p.getInputStream());
 				p.waitFor();
 
-				final BufferedImage outputImage = imageIn;
-
 				final long duration = System.nanoTime() - start;
 				System.out.println(description + ": " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
 
-				return outputImage;
+				return imageIn;
 			}
 		};
 
