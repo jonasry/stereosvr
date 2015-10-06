@@ -1,6 +1,12 @@
 package com.jonasry.stereosvr;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Implementation of (with some modifications):
@@ -27,19 +33,34 @@ public class Barrel {
 		System.out.println("Applying Barrel Distortion Correction");
 		System.out.println("   Using rc = " + String.format("%8.4f", rc));
 		System.out.println("   Using  z = " + String.format("%8.4f", z));
+		
+		final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+		final List<Future<?>> list = new ArrayList<>();
 
 		final BufferedImage output = new BufferedImage(width, height, image.getType());
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				final Point s = Point
-						.from(x, y)
-						.translate(-halfWidth, -halfHeight)
-						.applyTheta(rc, z)
-						.translate(halfWidth, halfHeight);
-
-				if (s.x < width && s.x >= 0 && s.y < height && s.y >= 0) {
-					output.setRGB(x, y, image.getRGB((int) s.x, (int) s.y));
+		for (int w = 0; w < height; w++) {
+			final int y = w;
+			final Future<?> future = executorService.submit(() -> {
+				for (int x = 0; x < width; x++) {
+					final Point s = Point
+							.from(x, y)
+							.translate(-halfWidth, -halfHeight)
+							.applyTheta(rc, z)
+							.translate(halfWidth, halfHeight);
+	
+					if (s.x < width && s.x >= 0 && s.y < height && s.y >= 0) {
+						output.setRGB(x, y, image.getRGB((int) s.x, (int) s.y));
+					}
 				}
+			});
+			list.add(future);
+		}
+		for (Future<?> f : list) {
+			try {
+				f.get();
+			} catch (InterruptedException e) {
+			} catch (ExecutionException e) {
+				throw new RuntimeException(e.getCause());
 			}
 		}
 		return output;
