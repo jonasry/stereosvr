@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Capture {
 	private static final double ROT = 270.0;
-	private static final int VERTICAL_OFFSET = 22;
+	private static final int VERTICAL_OFFSET = 0;
 	private static final String SIZE = "1920x1080";
 	private static final String DEVICE_PREFIX = "V4L2";
 	private static final String DEVICE_PATH = "/dev/video";
