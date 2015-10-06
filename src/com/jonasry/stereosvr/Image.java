@@ -3,8 +3,10 @@ package com.jonasry.stereosvr;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -20,17 +22,21 @@ public class Image {
 	}
 
 	public static File writeStereoImage(final BufferedImage left, final BufferedImage right, String fileName) throws IOException {
-		return write(createStereoImage(left, right), fileName);
+		final File file = new File(fileName);
+		write(createStereoImage(left, right), fileName, new FileOutputStream(file));
+		return file;
 	}
 
-	public static File write(BufferedImage image, String name) throws IOException {
+	public static void writeStereoImage(final BufferedImage left, final BufferedImage right, OutputStream outputStream) throws IOException {
+		write(createStereoImage(left, right), "out.png", outputStream);
+	}
+
+	public static void write(BufferedImage image, String name, OutputStream out) throws IOException {
 		System.out.println("Writing " + name + ". W:" + image.getWidth() + " H:" + image.getHeight());
-		final File file = new File(name);
 		final long start = System.nanoTime();
-		ImageIO.write(image, getType(name), file);
+		ImageIO.write(image, getType(name), out);
 		final long duration = System.nanoTime() - start;
 		System.out.println("Saved " + name + " in " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
-		return file;
 	}
 
 	public static BufferedImage read(String name) throws IOException {

@@ -44,8 +44,6 @@ public class Main {
 
 	@SuppressWarnings("serial")
 	public static class ControllerServlet extends HttpServlet {
-		private static final String OUT_PNG = "out.png";
-
 		@Override
 		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			final String path = req.getPathInfo();
@@ -55,8 +53,8 @@ public class Main {
 			} else {
 				try {
 					if (path.endsWith("stereo")) {
-						captureAndSaveImage(OUT_PNG);
-						resp.sendRedirect(String.format("/%s", OUT_PNG));
+						resp.setContentType("image/png");
+						captureAndSaveImage(resp.getOutputStream());
 
 					} else {
 						resp.sendRedirect("/index.html");

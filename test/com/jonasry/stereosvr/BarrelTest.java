@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ public class BarrelTest {
 		}
 
 		final BufferedImage corr = Barrel.applyCorrection(image, Barrel.STRENGTH, 0.85);
-		Image.write(Image.createStereoImage(corr, corr), "test.png");
+		Image.write(Image.createStereoImage(corr, corr), "test.png", new FileOutputStream("test.png"));
 
 		graphics.dispose();
 	}

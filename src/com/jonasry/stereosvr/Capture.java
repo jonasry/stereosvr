@@ -3,8 +3,8 @@ package com.jonasry.stereosvr;
 import static com.jonasry.stereosvr.Barrel.applyCorrection;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -22,13 +22,13 @@ public class Capture {
 	private static final String LEFT = "0";
 	private static final String RIGHT = "1";
 
-	public static File captureAndSaveImage(String fileName) throws InterruptedException, ExecutionException, IOException {
+	public static void captureAndSaveImage(OutputStream output) throws InterruptedException, ExecutionException, IOException {
 		final ExecutorService service = Executors.newFixedThreadPool(2);
 		final long start = System.nanoTime();
 		try {
 			final Future<BufferedImage> leftFuture = capture(service, "left", DEVICE_PATH + LEFT, 0);
 			final Future<BufferedImage> rightFuture = capture(service, "right", DEVICE_PATH + RIGHT, VERTICAL_OFFSET);
-			return Image.writeStereoImage(applyCorrection(leftFuture.get()), applyCorrection(rightFuture.get()), fileName);
+			Image.writeStereoImage(applyCorrection(leftFuture.get()), applyCorrection(rightFuture.get()), output);
 
 		} finally {
 			final long duration = System.nanoTime() - start;

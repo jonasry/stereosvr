@@ -56,10 +56,4 @@ public class Barrel {
 		public double length() { return Math.sqrt(x * x + y * y); }
 		public double theta(double rc, double z) { double r = length() / rc; return r == 0 ? 1 : z * r / Math.atan(r); }
 	}
-
-	public static void main(String[] args) throws Exception {
-		final BufferedImage image = Image.read(args[0]);
-		final BufferedImage result = applyCorrection(image);
-		Image.write(result, "result-" + args[0]);
-	}
 }
