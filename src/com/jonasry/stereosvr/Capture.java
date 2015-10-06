@@ -28,7 +28,7 @@ public class Capture {
 		try {
 			final Future<BufferedImage> leftFuture = capture(service, "left", DEVICE_PATH + LEFT, 0);
 			final Future<BufferedImage> rightFuture = capture(service, "right", DEVICE_PATH + RIGHT, VERTICAL_OFFSET);
-			Image.writeStereoImage(applyCorrection(leftFuture.get()), applyCorrection(rightFuture.get()), output);
+			Image.writeStereoImage(leftFuture.get(), rightFuture.get(), output);
 
 		} finally {
 			final long duration = System.nanoTime() - start;
@@ -56,7 +56,7 @@ public class Capture {
 				final long duration = System.nanoTime() - start;
 				System.out.println(description + ": " + TimeUnit.NANOSECONDS.toMillis(duration) + " ms.");
 
-				return imageIn;
+				return applyCorrection(imageIn);
 			}
 		};
 
