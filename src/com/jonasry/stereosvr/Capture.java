@@ -19,8 +19,8 @@ public class Capture {
 	private static final String SIZE = "1920x1080";
 	private static final String DEVICE_PREFIX = "V4L2";
 	private static final String DEVICE_PATH = "/dev/video";
-	private static final String RIGHT = "0";
-	private static final String LEFT = "1";
+	private static final String LEFT = "0";
+	private static final String RIGHT = "1";
 
 	public static File captureAndSaveImage(String fileName) throws InterruptedException, ExecutionException, IOException {
 		final ExecutorService service = Executors.newFixedThreadPool(2);
