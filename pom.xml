@@ -5,7 +5,7 @@
 	<artifactId>stereosvr</artifactId>
 	<version>1.0.2</version>
 	<properties>
-		<jetty.version>9.2.2.v20140723</jetty.version>
+		<jetty.version>9.4.41.v20210516</jetty.version>
 	</properties>
 	<dependencies>
 		<dependency>
